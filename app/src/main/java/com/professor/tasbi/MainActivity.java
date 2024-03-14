@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textView;
     private int number = 0;
+    private MediaPlayer mediaPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = findViewById(R.id.count);
+        mediaPlayer = MediaPlayer.create(this, R.raw.tone);
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -46,5 +49,22 @@ public class MainActivity extends AppCompatActivity {
     }
     private void updateNumber() {
         textView.setText(String.valueOf(number));
+        if (number % 100 == 0 && number > 0)
+        {
+            playTone();
+        }
+    }
+    private void playTone() {
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 }
